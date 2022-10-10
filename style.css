@@ -29,15 +29,100 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(5px);
+}
+
+.counter-clock {
+    position: absolute;
+    width: auto;
+    height: 100vh;
+    left: calc(50vw - 300px);
+    top: 300px;
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================================================================================================= */
+
+#timer {
+    font-size: 150px;
+    position: relative;
+    width: auto;
+    color: rgb(55, 3, 71)
+}
+
+#controls {
+    position: relative;
+    left: 150px;
+    width: 300px;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+}
+
+#controls button {
+    font-size: 25px;
+    width: 75px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+#controls button:hover {
+    background-color: rgb(113, 45, 113);
+}
+/* ================================================================================================= */
+
+.btn-array {
+    width: 150px;
+    height: 150px;
+    left: 150px;
+    top: 0;
+    border-radius: 50%;
+    position: absolute;
+    transition: transform 1500ms;
+}
+
+.lens-btn {
+    width: 25px;
+    height: 25px;
+    background-image: linear-gradient(rgb(55, 3, 71), rgba(26, 33, 236, 0.628));
+    border-radius: 50%;
+    position: absolute;
+    color: white;
+    font-size: 15px;
+    line-height: 25px;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+.btn-found-you {
+    transform: rotate(360deg);
+    cursor: pointer;
+}
+
+.btn-drag-lens {
+    transform: rotate(380deg);
+    cursor: grab;
+}
+
+#found-you {
+    right: -15px;
+    top: -15px;
+}
+
+#drag-lens {
+    transform: rotate(25deg);
+    right: -15px;
+    top: -15px;
+    z-index: 3;
 }
 
 .lens-holder {
-    z-index: 3;
     width: 300px;
     height: 150px;
-    left: 50%;
-    top: 50%;
+    left: calc(50% - 150px);
+    top: 55%;
     position: absolute;
     display: flex;
 }
@@ -49,6 +134,10 @@ body {
     border: 10px solid black;
     position: relative;
     overflow: hidden;
+    user-select: none;
+}
+
+i {
     user-select: none;
 }
 
@@ -76,7 +165,6 @@ body {
     height: 15px;
     border-radius: 50%;
     background-color: black;
-    cursor: grab;
 }
 
 .bottom-left {
@@ -87,7 +175,6 @@ body {
     height: 15px;
     border-radius: 50%;
     background-color: black;
-    /* cursor: grab; */
 }
 
 .lens-support {

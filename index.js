@@ -28,8 +28,8 @@ function offsetImage() {
 }
 
 offsetImage();
-let bottomRight = document.querySelector(".bottom-right");
-bottomRight.addEventListener("mousedown", mousedown, false);
+let dragLens = document.querySelector(".btn-drag-lens");
+dragLens.addEventListener("mousedown", mousedown, false);
 
 function mousedown(e) {
     console.log("mousedown function fires!");
@@ -54,18 +54,80 @@ function mousedown(e) {
         prevY = e.clientY;
 
         offsetImage();
-
     }
 
     function mouseup() {
         console.log("mouseup function fires!");
+
         window.removeEventListener("mousemove", mousemove);
         window.removeEventListener("mouseup", mouseup);
     }
 }
 
-// TODO: add timer: reduces blur filter and adds glasses
+// TODO: add to timer event: reduce blur filter and add glasses
 // TODO: add game title and directions
 // TODO: add hover over helper for grabbing glasses
 // TODO: add an array of searchable images
 // TODO: add a "found waldo" button with waldoChecker function
+// function foundWaldo ()
+
+let minutes = 0;
+let seconds = 0;
+let miliseconds = 0;
+let start = document.getElementById("start");
+let stop = document.getElementById("stop");
+let reset = document.getElementById("reset");
+let minutesElem = document.getElementById("minutes");
+let secondsElem = document.getElementById("seconds");
+let milisecondsElem = document.getElementById("miliseconds");
+
+start.addEventListener("click", function () {
+    startTimer();
+});
+
+stop.addEventListener("click", function () {
+    clearTimeout(timer);
+});
+
+reset.addEventListener("click", function () {
+    minutes = 0;
+    seconds = 0;
+    miliseconds = 0;
+    minutesElem.innerText = "00:";
+    secondsElem.innerText = "00:";
+    milisecondsElem.innerText = "00";
+});
+
+function timeKeeper() {
+    miliseconds++;
+    if (miliseconds > 99) {
+        miliseconds = 0;
+        seconds++;
+        if (seconds > 59) {
+            seconds = 0;
+            minutes++;
+            if (minutes < 10) {
+                minutesElem.innerText = `0${minutes}:`;
+            } else {
+                minutesElem.innerText = `${minutes}:`;
+            }
+        }
+
+        if (seconds < 10) {
+            secondsElem.innerText = `0${seconds}:`;
+        } else {
+            secondsElem.innerText = `${seconds}:`;
+        }
+    }
+    if (miliseconds < 10) {
+        milisecondsElem.innerText = `0${miliseconds}`;
+    } else {
+        milisecondsElem.innerText = miliseconds;
+    }
+
+    startTimer();
+}
+
+function startTimer() {
+    timer = setTimeout(timeKeeper, 10);
+}

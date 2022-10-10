@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <title>Find Waldo</title>
 </head>
 
@@ -16,13 +18,36 @@
             <div class="image-blur"></div>
         </div>
     </div>
-    
+
+    <div class="counter-clock">
+        <div id="controls">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reset">Reset</button>
+        </div>
+
+        <div id="timer">
+            <span id="minutes">00:</span>
+            <span id="seconds">00:</span>
+            <span id="miliseconds">00</span>
+        </div>
+    </div>
+
     <div class="lens-holder">
         <div class="lens lens-left"><img src="./find-waldo.png" alt="waldo image" id="img-left"></div>
         <div class="lens lens-right"><img src="./find-waldo.png" alt="waldo image" id="img-right"></div>
         <div class="lens-support"></div>
         <div class="bottom-left"></div>
         <div class="bottom-right"></div>
+
+        <div class="btn-found-you btn-array">
+            <div id="found-you" class="lens-btn"><i class="fa fa-check"></i></div>
+        </div>
+
+        <div class="btn-drag-lens btn-array">
+            <div id="drag-lens" class="lens-btn"><i class="fa fa-arrows"></i></div>
+        </div>
+
     </div>
     <script src="index.js"></script>
 </body>
