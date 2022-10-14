@@ -20,7 +20,7 @@ body {
 .image-holder {
     width: 100vw;
     height: 100vh;
-    background-image: url("./find-waldo.png");
+    background-image: url("../images/find-waldo.png");
     background-repeat: no-repeat;
     background-size: 100vw, auto;
 }
@@ -29,7 +29,55 @@ body {
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
+}
+
+.increase-blur {
+    animation: more-blur 500ms ease-in;
+    backdrop-filter: blur(15px);
+}
+
+.decrease-blur {
+    animation: less-blur 500ms ease-in;
     backdrop-filter: blur(5px);
+}
+
+@keyframes more-blur {
+    0% {
+        backdrop-filter: blur(5px);
+    }
+
+    100% {
+        backdrop-filter: blur(15px);
+    }
+}
+
+@keyframes less-blur {
+    from {
+        backdrop-filter: blur(15px);
+    }
+
+    to {
+        backdrop-filter: blur(5px);
+    }
+}
+
+.pulse {
+    animation: pulse-animation 1.5s ease-out;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 80px rgba(246, 251, 251, 0.076);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+    }
+
 }
 
 .counter-clock {
@@ -71,6 +119,7 @@ body {
 #controls button:hover {
     background-color: rgb(113, 45, 113);
 }
+
 /* ================================================================================================= */
 
 .btn-array {
@@ -124,7 +173,7 @@ body {
     left: calc(50% - 150px);
     top: 55%;
     position: absolute;
-    display: flex;
+    display: none;
 }
 
 .lens {
