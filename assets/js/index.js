@@ -40,6 +40,8 @@ function mousedown(e) {
     window.addEventListener("mousemove", mousemove, false);
     window.addEventListener("mouseup", mouseup, false);
 
+    // alert(e.clientY);
+
     let prevX = e.clientX;
     let prevY = e.clientY;
 
@@ -50,11 +52,20 @@ function mousedown(e) {
             newY = prevY - e.clientY;
 
         const lensHolderCoords = lensHolder.getBoundingClientRect();
+
+        // get location of lens holder: TODO: move this outside of mousemove event?
+        let lensHolderElemWidth = lensHolderCoords.width / 2;
+        let lensHolderElemLeft = lensHolderCoords.left + lensHolderElemWidth + 75;
+        let lensHolderElemHeight = lensHolderCoords.height / 2;
+        let lensHolderElemTop = lensHolderCoords.top + lensHolderElemHeight + 75;
+
         lensHolder.style.left = lensHolderCoords.left - newX + "px";
         lensHolder.style.top = lensHolderCoords.top - newY + "px";
 
         prevX = e.clientX;
         prevY = e.clientY;
+
+        moveEyes(lensHolderElemLeft, lensHolderElemTop);
 
         offsetImage();
     }
@@ -72,6 +83,37 @@ function mousedown(e) {
         window.removeEventListener("mousemove", mousemove);
         window.removeEventListener("mouseup", mouseup);
     }
+}
+
+// TODO: add puppy eyes - follow mouse when glasses dragged
+
+function moveEyes(clientX, clientY) {
+    let leftPuppyEye = document.getElementById("pup-left");
+    let rightPuppyEye = document.getElementById("pup-right");
+    let puppyElem = document.getElementById("puppy-image");
+    let puppyElemCoords = puppyElem.getBoundingClientRect();
+
+    // get location of puppy head: TODO: move this outside of mousemove event
+    let puppyElemWidth = puppyElemCoords.width / 3;
+    let puppyElemLeft = puppyElemCoords.left + puppyElemWidth;
+    let puppyElemHeight = puppyElemCoords.width / 3;
+    let puppyElemTop = puppyElemCoords.top + puppyElemHeight;
+
+    let degree = getDegree(clientX, clientY, puppyElemLeft, puppyElemTop);
+
+    const puppyEyes = document.querySelectorAll(".eye");
+
+    puppyEyes.forEach(function (eye) {
+        eye.style.transform = `rotate(${90 + degree}deg)`;
+    });
+}
+
+function getDegree(clientX, clientY, puppyElemCoordsX, puppyElemCoordsY) {
+    const dx = puppyElemCoordsX - clientX;
+    const dy = puppyElemCoordsY - clientY;
+    const rad = Math.atan2(dy, dx);
+    const degree = (rad * 180) / Math.PI;
+    return degree;
 }
 
 // TODO: add game title and directions

@@ -2,11 +2,14 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Paytone One', sans-serif;
 }
 
 body {
     overflow: hidden;
 }
+
+
 
 /* .page-header {
 
@@ -24,6 +27,10 @@ body {
     background-repeat: no-repeat;
     background-size: 100vw, auto;
 }
+
+/* ================================================================= */
+/* background blur */
+/* ================================================================= */
 
 .image-blur {
     width: 100%;
@@ -61,66 +68,9 @@ body {
     }
 }
 
-.pulse {
-    animation: pulse-animation 1.5s ease-out;
-}
-
-@keyframes pulse-animation {
-    0% {
-        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
-    }
-
-    50% {
-        box-shadow: 0 0 0 80px rgba(246, 251, 251, 0.076);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
-    }
-
-}
-
-.counter-clock {
-    position: absolute;
-    width: auto;
-    height: 100vh;
-    left: calc(50vw - 300px);
-    top: 300px;
-    user-select: none;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ================================================================================================= */
-
-#timer {
-    font-size: 150px;
-    position: relative;
-    width: auto;
-    color: rgb(55, 3, 71)
-}
-
-#controls {
-    position: relative;
-    left: 150px;
-    width: 300px;
-    align-items: center;
-    display: flex;
-    justify-content: space-around;
-}
-
-#controls button {
-    font-size: 25px;
-    width: 75px;
-    cursor: pointer;
-    border-radius: 10px;
-}
-
-#controls button:hover {
-    background-color: rgb(113, 45, 113);
-}
-
-/* ================================================================================================= */
+/* ================================================================= */
+/* glasses: button parts */
+/* ================================================================= */
 
 .btn-array {
     width: 150px;
@@ -166,6 +116,10 @@ body {
     top: -15px;
     z-index: 3;
 }
+
+/* ================================================================= */
+/* glasses: lens parts */
+/* ================================================================= */
 
 .lens-holder {
     width: 300px;
@@ -239,4 +193,220 @@ i {
     border-left-color: transparent;
     /* Rotate the circle */
     transform: rotate(-45deg);
+}
+
+.pulse {
+    animation: pulse-animation 1.5s ease-out;
+}
+
+@keyframes pulse-animation {
+    0% {
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 0 80px #06a0d485;
+    }
+
+    100% {
+        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+    }
+
+}
+
+/* ================================================================= */
+
+.container {
+    position: absolute;
+    display: flex;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ================================================================= */
+/* timer parts */
+/* ================================================================= */
+
+.counter-clock {
+    position: relative;
+    display: flex;
+    width: auto;
+    height: 75%;
+    top: 0;
+    flex-direction: column;
+    /* left: calc(50vw - 300px); */
+    /* top: 300px; */
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+}
+
+#timer {
+    font-size: 150px;
+    position: relative;
+    display: flex;
+    width: 100%;
+    /* color: rgb(55, 3, 71); */
+    align-items: center;
+    justify-content: center;
+}
+
+#controls {
+    position: relative;
+    display: flex;
+    height: auto;
+    width: 400px;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+#controls button {
+    position: relative;
+    background-color: #fdeb6e;
+    color: #0d87af;
+    text-shadow: .5px .5px 1px #073645;
+    border: 2px solid #06a0d4;
+    display: flex;
+    font-size: 25px;
+    line-height: 25px;
+    height: 35px;
+    width: 100px;
+    cursor: pointer;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+#controls button:hover {
+    background-color: #06a0d4;
+    color: white;
+}
+
+#minutes,
+#miliseconds {
+    color: #06a0d4;
+    text-shadow: 1px 2px 3px #073645;
+    min-width: 250px;
+    width: 250px;
+}
+
+#seconds {
+    color: #dc412d;
+    text-shadow: 1px 2px 3px #3a0b05;
+    width: 250px;
+    min-width: 250px;
+}
+
+/* ================================================================= */
+/* logo and page title */
+/* ================================================================= */
+
+.main-title-holder {
+    position: relative;
+    display: flex;
+    width: 25%;
+    height: 25%;
+    bottom: 0;
+    top: 25%;
+}
+
+/* ============================= */
+/* puppy parts */
+/* ============================= */
+
+.puppy-image-holder {
+    position: relative;
+    display: flex;
+    width: auto;
+    height: 100%;
+    user-select: none;
+}
+
+#puppy-image {
+    width: auto;
+    height: 150px;
+    user-select: none;
+}
+
+.eye,
+.pupil {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.eye {
+    background-color: white;
+    /* border : 1px solid black; */
+    left: 50px;
+    top: 50px;
+    width: 15px;
+    height: 15px;
+}
+
+.pupil {
+    background-color: black;
+    left: 4.25px;
+    top: 8.25px;
+    width: 5px;
+    height: 5px;
+}
+
+/* TODO: make more dynamic and responsive */
+#pup-left {
+    left: 11px;
+    top: 38px;
+}
+
+#pup-right {
+    left: 33px;
+    top: 34px;
+}
+
+/* ============================= */
+/* page title */
+/* ============================= */
+
+.title-holder {
+    position: relative;
+    display: flex;
+    width: 50%;
+    height: auto;
+    /* left: calc(50vw - 300px); */
+    user-select: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-row-one,
+.title-row-two {
+    height: 150px;
+    width: 150px;
+    margin: 0;
+    user-select: none;
+    justify-content: center;
+    position: absolute;
+    display: flex;
+    font-size: 3em;
+    line-height: 3em;
+    text-align: justify;
+}
+
+.title-row-one {
+    top: 0;
+    left: 75px;
+    color: #06a0d4;
+    text-shadow: 1px 2px 3px #073645;
+}
+
+.title-row-two {
+    top: 50px;
+    left: 75px;
+    color: #dc412d;
+    text-shadow: 1px 2px 3px #3a0b05;
+    font-size: 3.25em;
 }
