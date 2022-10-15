@@ -3,12 +3,61 @@ let lensHolder = document.querySelector(".lens-holder");
 let lensImageLeftElem = document.querySelector("#img-left");
 let lensImageRightElem = document.querySelector("#img-right");
 
+// holds image for lenses and imageHolder background:
+let currentImage = "";
+let currentIndex = 0;
+let randNumArr = [];
+
+const waldoObjArr = [
+    { img: "./assets/images/find-waldo.png", pos: { x: 330, y: 294 } },
+    { img: "./assets/images/beach.png", pos: { x: 100, y: 100 } },
+    { img: "./assets/images/sports.png", pos: { x: 100, y: 100 } },
+    { img: "./assets/images/track-and-field.png", pos: { x: 100, y: 100 } },
+    { img: "./assets/images/carnival-detail.png", pos: { x: 100, y: 100 } },
+    { img: "./assets/images/art-show.png", pos: { x: 100, y: 100 } },
+];
+
+function getRandom() {
+    if (randNumArr.length === waldoObjArr.length) {
+        randNumArr = [];
+    }
+    let randomIndex = Math.floor(Math.random() * waldoObjArr.length);
+    console.log("randomIndex");
+    console.log(randomIndex);
+    let numExists = randNumArr.indexOf(randomIndex);
+    if (numExists !== -1) {
+        getRandom();
+    } else {
+        currentIndex = randomIndex;
+        randNumArr.push(randomIndex);
+        return randomIndex;
+    }
+}
+
+function nextSearch() {
+    let randomIndex = getRandom();
+    console.log(randomIndex);
+    console.log(waldoObjArr[randomIndex].img);
+
+    currentImage = waldoObjArr[randomIndex].img;
+
+    imageHolder.style.backgroundImage = `url(${currentImage})`;
+    imageHolder.style.backgroundSize = "100vw, 100vh";
+
+    lensImageLeftElem.src = currentImage;
+    lensImageRightElem.src = currentImage;
+}
+
+// function getImageData(){
+//     lensImageLeftElem.src = currentImage;
+//     lensImageRightElem.src = currentImage;
+// };
+
 function offsetImage() {
     console.log("offsetImage function fires!");
 
-    let imageHolderCoords = imageHolder.getBoundingClientRect();
-
     let lensHolderCoords = lensHolder.getBoundingClientRect();
+    // let imageHolderCoords = imageHolder.getBoundingClientRect();
 
     // let imageMidpointLeft = imageHolderCoords.width / 2 + imageHolderCoords.left;
     // let imageMidpointTop = imageHolderCoords.height / 2 + imageHolderCoords.top;
@@ -40,8 +89,6 @@ function mousedown(e) {
     window.addEventListener("mousemove", mousemove, false);
     window.addEventListener("mouseup", mouseup, false);
 
-    // alert(e.clientY);
-
     let prevX = e.clientX;
     let prevY = e.clientY;
 
@@ -55,9 +102,11 @@ function mousedown(e) {
 
         // get location of lens holder: TODO: move this outside of mousemove event?
         let lensHolderElemWidth = lensHolderCoords.width / 2;
-        let lensHolderElemLeft = lensHolderCoords.left + lensHolderElemWidth + 75;
+        let lensHolderElemLeft =
+            lensHolderCoords.left + lensHolderElemWidth + 75;
         let lensHolderElemHeight = lensHolderCoords.height / 2;
-        let lensHolderElemTop = lensHolderCoords.top + lensHolderElemHeight + 75;
+        let lensHolderElemTop =
+            lensHolderCoords.top + lensHolderElemHeight + 75;
 
         lensHolder.style.left = lensHolderCoords.left - newX + "px";
         lensHolder.style.top = lensHolderCoords.top - newY + "px";
@@ -127,9 +176,9 @@ foundYouElem.addEventListener("click", function () {
 
     // TODO: replace alerts with non-blocking, toast messages:
     if (theresWaldo) {
-        alert(
-            `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.`
-        );
+        // alert(
+        //     `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.`
+        // );
 
         let lens = document.querySelector(`.lens-${theresWaldo}`);
 
@@ -139,6 +188,7 @@ foundYouElem.addEventListener("click", function () {
 
             setTimeout(function () {
                 lens.classList.remove("pulse");
+                resetScreen();
             }, 2000);
         }
 
@@ -209,10 +259,10 @@ function getLensSpan(L, T, W, H) {
 
 function checkPosition({ startX, endX, startY, endY }) {
     if (
-        waldoPos.x >= startX &&
-        waldoPos.x <= endX &&
-        waldoPos.y >= startY &&
-        waldoPos.y <= endY
+        waldoObjArr[currentIndex].pos.x >= startX &&
+        waldoObjArr[currentIndex].pos.x <= endX &&
+        waldoObjArr[currentIndex].pos.y >= startY &&
+        waldoObjArr[currentIndex].pos.y <= endY
     ) {
         return true;
     } else {
@@ -220,12 +270,12 @@ function checkPosition({ startX, endX, startY, endY }) {
     }
 }
 
-// test position of Waldo:
-// TODO: need to expand Waldo searchable coords to a bounding area:
-let waldoPos = {
-    x: 330,
-    y: 294,
-};
+// // test position of Waldo:
+// // TODO: need to expand Waldo searchable coords to a bounding area:
+// let waldoPos = {
+//     x: 330,
+//     y: 294,
+// };
 
 // TODO: add to timer event: reduce blur filter and add glasses
 let timer = null;
@@ -248,6 +298,7 @@ start.addEventListener("click", function () {
     } else {
         startTimer();
         lensHolder.style.display = "flex";
+        // getImageData();
         offsetImage();
         blurElem.classList.add("decrease-blur");
         blurElem.classList.remove("increase-blur");
@@ -255,7 +306,9 @@ start.addEventListener("click", function () {
 });
 
 // stop timer and set background to blur and hide glasses:
-stop.addEventListener("click", function () {
+stop.addEventListener("click", stopTimer);
+
+function stopTimer () {
     if (timer) {
         clearTimeout(timer);
         lensHolder.style.display = "none";
@@ -265,9 +318,13 @@ stop.addEventListener("click", function () {
     } else {
         return;
     }
-});
+};
 
-reset.addEventListener("click", function () {
+// reset.addEventListener("click", resetScreen);
+
+function resetScreen() {
+    stopTimer();
+
     if (timer) {
         return;
     } else {
@@ -280,8 +337,9 @@ reset.addEventListener("click", function () {
 
         lensHolder.style.left = "calc(50% - 150px)";
         lensHolder.style.top = "55%";
+        nextSearch();
     }
-});
+}
 
 function timeKeeper() {
     miliseconds++;
