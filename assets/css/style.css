@@ -16,13 +16,17 @@ body {
 } */
 
 .frame-holder {
+    position: relative;
     width: 100vw;
     height: 100vh;
 }
 
 .image-holder {
+    position: absolute;
     width: 100vw;
     height: 100vh;
+    left: 0;
+    top: 0;
     background-image: url("../images/find-waldo.png");
     background-repeat: no-repeat;
     background-size: 100vw, auto;
@@ -125,7 +129,7 @@ body {
     width: 300px;
     height: 150px;
     left: calc(50% - 150px);
-    top: 55%;
+    top: 10%;
     position: absolute;
     display: none;
 }
@@ -409,4 +413,120 @@ i {
     color: #dc412d;
     text-shadow: 1px 2px 3px #3a0b05;
     font-size: 3.25em;
+}
+
+/* ================================================================= */
+/* modal */
+/* ================================================================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 3;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefefb;
+    padding: 20px;
+    border: 1px solid #888;
+    border-radius: 25px;
+    height: 50%;
+    width: 60%;
+    color: #06a0d4;
+    text-align: center;
+    font-size: 25px;
+    margin: auto;
+}
+
+.close {
+    color: #06a0d4;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ================================================================= */
+/* selector screen */
+/* ================================================================= */
+
+.selector {
+    position: absolute;
+    left: calc(50% - 25px);
+    top: calc(50% - 25px);
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    border: 5px dashed red
+}
+
+.btn-holder {
+    position: absolute;
+    width: 75px;
+    height: 75px;
+    left: -5px;
+    top: -5px;
+    border-radius: 50%;
+    transition: transform 1500ms;
+}
+
+#waldo-here {
+    right: -15px;
+    top: -15px;
+}
+
+#drag-selector {
+    transform: rotate(35deg);
+    right: -15px;
+    top: -15px;
+    z-index: 3;
+}
+
+.btn-waldo-selector {
+    transform: rotate(360deg);
+    cursor: pointer;
+}
+
+.btn-drag-holder {
+    transform: rotate(415deg);
+    cursor: grab;
+}
+
+.left-arrow,
+.right-arrow {
+    position: absolute;
+}
+
+.left-arrow {
+    top: 25px;
+    left: 25px;
+}
+
+.right-arrow {
+    top: 25px;
+    right: 25px;
+}
+
+.tool {
+    align-items: center;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 50px;
+    font-size: 1.5em;
+    width: 50px;
+    height: 50px;
+    background-image: linear-gradient(rgb(166, 12, 237), rgba(47, 238, 255, 0.822));
 }

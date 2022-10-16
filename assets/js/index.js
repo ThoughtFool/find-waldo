@@ -7,26 +7,58 @@ let lensImageRightElem = document.querySelector("#img-right");
 let currentImage = "";
 let currentIndex = 0;
 let randNumArr = [];
+let modalOpen = false;
 
-const waldoObjArr = [
-    { img: "./assets/images/find-waldo.png", pos: { x: 330, y: 294 } },
-    { img: "./assets/images/beach.png", pos: { x: 100, y: 100 } },
-    { img: "./assets/images/sports.png", pos: { x: 100, y: 100 } },
-    { img: "./assets/images/track-and-field.png", pos: { x: 100, y: 100 } },
-    { img: "./assets/images/carnival-detail.png", pos: { x: 100, y: 100 } },
-    { img: "./assets/images/art-show.png", pos: { x: 100, y: 100 } },
-];
+// TODO: getLocal to use recorded locations:
+// TODO: create function to use waldo's recorded coords and adjusts to screen-size
+const waldoObjArr = {
+    currentImageIndex: 0, // TODO: set value to current
+    imageArray: [
+        { img: "./assets/images/find-waldo.png", pos: { x: 330, y: 294 } },
+        { img: "./assets/images/beach.png", pos: { x: 100, y: 100 } },
+        { img: "./assets/images/sports.png", pos: { x: 100, y: 100 } },
+        { img: "./assets/images/track-and-field.png", pos: { x: 100, y: 100 } },
+        { img: "./assets/images/carnival-detail.png", pos: { x: 100, y: 100 } },
+        { img: "./assets/images/art-show.png", pos: { x: 100, y: 100 } },
+    ],
+    getLocal: function (keyString) {
+        console.log("getLocal function fires!");
+
+        let dataString = localStorage.getItem(keyString);
+        let data = JSON.parse(dataString);
+
+        return data;
+    },
+    getStorageObj: function () {
+        console.log(this.getLocal("image-object") === null);
+
+        let imageObjParsed =
+            this.getLocal("image-object") === null
+                ? this.imageArray
+                : this.getLocal("image-object");
+
+        this.imageArray = imageObjParsed;
+    },
+};
+
+(function init() {
+    console.log("init function fires!");
+
+    waldoObjArr.getStorageObj();
+})();
 
 function getRandom() {
-    if (randNumArr.length === waldoObjArr.length) {
+    if (randNumArr.length >= waldoObjArr.imageArray.length) {
         randNumArr = [];
     }
-    let randomIndex = Math.floor(Math.random() * waldoObjArr.length);
+    let randomIndex = Math.floor(Math.random() * waldoObjArr.imageArray.length);
     console.log("randomIndex");
     console.log(randomIndex);
     let numExists = randNumArr.indexOf(randomIndex);
+
+    // if random number exists in array, run again:
     if (numExists !== -1) {
-        getRandom();
+        return getRandom();
     } else {
         currentIndex = randomIndex;
         randNumArr.push(randomIndex);
@@ -37,9 +69,9 @@ function getRandom() {
 function nextSearch() {
     let randomIndex = getRandom();
     console.log(randomIndex);
-    console.log(waldoObjArr[randomIndex].img);
+    console.log(waldoObjArr.imageArray[randomIndex].img);
 
-    currentImage = waldoObjArr[randomIndex].img;
+    currentImage = waldoObjArr.imageArray[randomIndex].img;
 
     imageHolder.style.backgroundImage = `url(${currentImage})`;
     imageHolder.style.backgroundSize = "100vw, 100vh";
@@ -95,28 +127,38 @@ function mousedown(e) {
     function mousemove(e) {
         console.log("mousemove function fires!");
 
-        let newX = prevX - e.clientX,
-            newY = prevY - e.clientY;
+        if (
+            e.clientX >= document.body.clientLeft + 15 &&
+            e.clientY >= document.body.clientTop + 15
+            // e.client <= document.body.clientLeft + document.body.clientWidth &&
+            // e.clientX <= document.body.clientTop + document.body.clientHeight
+        ) {
+            let newX = prevX - e.clientX,
+                newY = prevY - e.clientY;
 
-        const lensHolderCoords = lensHolder.getBoundingClientRect();
+            const lensHolderCoords = lensHolder.getBoundingClientRect();
 
-        // get location of lens holder: TODO: move this outside of mousemove event?
-        let lensHolderElemWidth = lensHolderCoords.width / 2;
-        let lensHolderElemLeft =
-            lensHolderCoords.left + lensHolderElemWidth + 75;
-        let lensHolderElemHeight = lensHolderCoords.height / 2;
-        let lensHolderElemTop =
-            lensHolderCoords.top + lensHolderElemHeight + 75;
+            // get location of lens holder: TODO: move this outside of mousemove event?
+            let lensHolderElemWidth = lensHolderCoords.width / 2;
+            let lensHolderElemLeft =
+                lensHolderCoords.left + lensHolderElemWidth + 75;
+            let lensHolderElemHeight = lensHolderCoords.height / 2;
+            let lensHolderElemTop =
+                lensHolderCoords.top + lensHolderElemHeight + 75;
 
-        lensHolder.style.left = lensHolderCoords.left - newX + "px";
-        lensHolder.style.top = lensHolderCoords.top - newY + "px";
+            lensHolder.style.left = lensHolderCoords.left - newX + "px";
+            lensHolder.style.top = lensHolderCoords.top - newY + "px";
 
-        prevX = e.clientX;
-        prevY = e.clientY;
+            prevX = e.clientX;
+            prevY = e.clientY;
 
-        moveEyes(lensHolderElemLeft, lensHolderElemTop);
+            moveEyes(lensHolderElemLeft, lensHolderElemTop);
 
-        offsetImage();
+            offsetImage();
+        } else {
+            window.removeEventListener("mousemove", mousemove);
+            window.removeEventListener("mouseup", mouseup);
+        }
     }
 
     function mouseup() {
@@ -176,19 +218,16 @@ foundYouElem.addEventListener("click", function () {
 
     // TODO: replace alerts with non-blocking, toast messages:
     if (theresWaldo) {
-        // alert(
-        //     `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.`
-        // );
-
+        let msg = `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.`;
         let lens = document.querySelector(`.lens-${theresWaldo}`);
 
-        // adding visual feedback to selector:
+        // adding visual feedback to winner:
         function rippleEffect() {
             lens.classList.add("pulse");
 
             setTimeout(function () {
                 lens.classList.remove("pulse");
-                resetScreen();
+                toggleModal(null, true, msg);
             }, 2000);
         }
 
@@ -196,9 +235,8 @@ foundYouElem.addEventListener("click", function () {
 
         clearTimeout(timer);
     } else {
-        alert(
-            `Sorry, there's no Waldo found in either lens. Please, keep trying, don't give up, never give up.`
-        );
+        let msg = `Sorry, there's no Waldo found in either lens. Please, keep trying, don't give up, never give up.`;
+        toggleModal(null, false, msg);
     }
 
     return theresWaldo;
@@ -259,10 +297,10 @@ function getLensSpan(L, T, W, H) {
 
 function checkPosition({ startX, endX, startY, endY }) {
     if (
-        waldoObjArr[currentIndex].pos.x >= startX &&
-        waldoObjArr[currentIndex].pos.x <= endX &&
-        waldoObjArr[currentIndex].pos.y >= startY &&
-        waldoObjArr[currentIndex].pos.y <= endY
+        waldoObjArr.imageArray[currentIndex].pos.x >= startX &&
+        waldoObjArr.imageArray[currentIndex].pos.x <= endX &&
+        waldoObjArr.imageArray[currentIndex].pos.y >= startY &&
+        waldoObjArr.imageArray[currentIndex].pos.y <= endY
     ) {
         return true;
     } else {
@@ -298,6 +336,7 @@ start.addEventListener("click", function () {
     } else {
         startTimer();
         lensHolder.style.display = "flex";
+        start.style.display = "none";
         // getImageData();
         offsetImage();
         blurElem.classList.add("decrease-blur");
@@ -308,24 +347,47 @@ start.addEventListener("click", function () {
 // stop timer and set background to blur and hide glasses:
 stop.addEventListener("click", stopTimer);
 
-function stopTimer () {
+function stopTimer() {
     if (timer) {
         clearTimeout(timer);
         lensHolder.style.display = "none";
+        start.style.display = "block";
         blurElem.classList.add("increase-blur");
         blurElem.classList.remove("decrease-blur");
         timer = null;
     } else {
         return;
     }
-};
+}
 
 // reset.addEventListener("click", resetScreen);
 
-function resetScreen() {
+let closeButton = document.querySelector(".close");
+
+closeButton.addEventListener("click", toggleModal);
+
+function toggleModal(e, bool, msg) {
+    let modal = document.querySelector(".modal");
+    let msgElem = document.getElementById("msg");
+
+    if (modalOpen) {
+        modal.style.display = "none";
+        modalOpen = false;
+
+        // TODO: ask client if they want to continue playing and adding initials to timed score:
+    } else {
+        modal.style.display = "block";
+        console.log(modal);
+        msgElem.innerText = msg;
+        modalOpen = true;
+        resetScreen(bool);
+    }
+}
+
+function resetScreen(bool) {
     stopTimer();
 
-    if (timer) {
+    if (bool === false || bool === undefined) {
         return;
     } else {
         minutes = 0;
@@ -336,7 +398,7 @@ function resetScreen() {
         milisecondsElem.innerText = "00";
 
         lensHolder.style.left = "calc(50% - 150px)";
-        lensHolder.style.top = "55%";
+        lensHolder.style.top = "10%";
         nextSearch();
     }
 }
