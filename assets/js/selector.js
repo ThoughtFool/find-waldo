@@ -7,15 +7,41 @@ let dragLens = document.querySelector(".btn-drag-holder");
 dragLens.addEventListener("mousedown", mousedown, false);
 waldoHere.addEventListener("click", getCoords);
 
+rippleEffect(waldoSelector);
+
 const waldoObjArr = {
     currentImageIndex: 0,
     imageArray: [
-        { img: "./assets/images/find-waldo.png", pos: { x: 330, y: 294 } },
-        { img: "./assets/images/beach.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/sports.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/track-and-field.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/carnival-detail.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/art-show.png", pos: { x: 100, y: 100 } },
+        {
+            img: "./assets/images/find-waldo.png",
+            pos: { x: 330, y: 294 },
+            id: "find-waldo",
+        },
+        {
+            img: "./assets/images/beach.png",
+            pos: { x: 100, y: 100 },
+            id: "beach",
+        },
+        {
+            img: "./assets/images/sports.png",
+            pos: { x: 100, y: 100 },
+            id: "sports",
+        },
+        {
+            img: "./assets/images/track-and-field.png",
+            pos: { x: 100, y: 100 },
+            id: "track-and-field",
+        },
+        {
+            img: "./assets/images/carnival-detail.png",
+            pos: { x: 100, y: 100 },
+            id: "carnival-detail",
+        },
+        {
+            img: "./assets/images/art-show.png",
+            pos: { x: 100, y: 100 },
+            id: "art-show",
+        },
     ],
     setLocal: function (keyString, dataToSave) {
         console.log("setLocal function fires!");
@@ -46,10 +72,12 @@ const waldoObjArr = {
         console.log(waldoObjArrParsed);
         this.imageArray = waldoObjArrParsed;
     },
+
     roundTwoPlaces: function (floatNum) {
         let roundedNum = Math.round((floatNum + Number.EPSILON) * 100) / 100;
         return roundedNum;
     },
+
     forwardFrame: function () {
         let currentIndex;
 
@@ -66,6 +94,7 @@ const waldoObjArr = {
             currentImageIndex: this.currentImageIndex,
         };
     },
+
     reverseFrame: function () {
         let currentIndex;
 
@@ -104,8 +133,18 @@ function switchFrame(indexCounterValue) {
     }
 }
 
+function rippleEffect(elem) {
+    elem.classList.add("pulse");
+
+    setTimeout(function () {
+        elem.classList.remove("pulse");
+    }, 2000);
+}
+
 function nextImage() {
     console.log("nextImage function fires!");
+
+    rippleEffect(waldoSelector);
 
     currentImage = waldoObjArr.imageArray[waldoObjArr.currentImageIndex].img;
 
@@ -137,6 +176,8 @@ function getCoords() {
         x: midPointX,
         y: midPointY,
     };
+
+    rippleEffect(waldoSelector);
 
     waldoObjArr.imageArray[waldoObjArr.currentImageIndex].pos = waldoPos;
 

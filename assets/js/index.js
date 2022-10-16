@@ -14,13 +14,45 @@ let modalOpen = false;
 const waldoObjArr = {
     currentImageIndex: 0, // TODO: set value to current
     imageArray: [
-        { img: "./assets/images/find-waldo.png", pos: { x: 330, y: 294 } },
-        { img: "./assets/images/beach.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/sports.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/track-and-field.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/carnival-detail.png", pos: { x: 100, y: 100 } },
-        { img: "./assets/images/art-show.png", pos: { x: 100, y: 100 } },
+        {
+            img: "./assets/images/find-waldo.png",
+            pos: { x: 330, y: 294 },
+            id: "find-waldo",
+        },
+        {
+            img: "./assets/images/beach.png",
+            pos: { x: 100, y: 100 },
+            id: "beach",
+        },
+        {
+            img: "./assets/images/sports.png",
+            pos: { x: 100, y: 100 },
+            id: "sports",
+        },
+        {
+            img: "./assets/images/track-and-field.png",
+            pos: { x: 100, y: 100 },
+            id: "track-and-field",
+        },
+        {
+            img: "./assets/images/carnival-detail.png",
+            pos: { x: 100, y: 100 },
+            id: "carnival-detail",
+        },
+        {
+            img: "./assets/images/art-show.png",
+            pos: { x: 100, y: 100 },
+            id: "art-show",
+        },
     ],
+    setLocal: function (keyString, dataToSave) {
+        console.log("setLocal function fires!");
+
+        let dataString = JSON.stringify(dataToSave);
+        localStorage.setItem(keyString, dataString);
+
+        return dataString;
+    },
     getLocal: function (keyString) {
         console.log("getLocal function fires!");
 
@@ -61,6 +93,7 @@ function getRandom() {
         return getRandom();
     } else {
         currentIndex = randomIndex;
+        waldoObjArr.currentImageIndex = randomIndex;
         randNumArr.push(randomIndex);
         return randomIndex;
     }
@@ -212,6 +245,12 @@ function getDegree(clientX, clientY, puppyElemCoordsX, puppyElemCoordsY) {
 // TODO: add an array of searchable images
 // TODO: add a "found waldo" button with waldoChecker function
 
+function getTimestamp () {
+    let timestamp = `${minutes}:${seconds}:${miliseconds}`;
+    
+    return timestamp;
+};
+
 let foundYouElem = document.getElementById("found-you");
 foundYouElem.addEventListener("click", function () {
     let theresWaldo = foundWaldo();
@@ -220,6 +259,19 @@ foundYouElem.addEventListener("click", function () {
     if (theresWaldo) {
         let msg = `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.`;
         let lens = document.querySelector(`.lens-${theresWaldo}`);
+
+        let timestamp = getTimestamp();
+
+        // TODO: getLocalObj and spread the results, pushing in new values:
+        // TODO: overwrite the previous scores with faster times for each screen:
+        // let currentWinners = waldoObjArr.getLocal("winners-circle");
+
+        console.log(waldoObjArr.imageArray[waldoObjArr.currentImageIndex].id);
+
+        waldoObjArr.setLocal("winners-circle", {
+            id: waldoObjArr.imageArray[waldoObjArr.currentImageIndex].id,
+            timestamp,
+        });
 
         // adding visual feedback to winner:
         function rippleEffect() {
