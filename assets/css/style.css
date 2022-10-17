@@ -423,7 +423,7 @@ i {
     display: none;
     position: fixed;
     z-index: 3;
-    padding-top: 100px;
+    padding-top: 10%;
     left: 0;
     top: 0;
     width: 100%;
@@ -433,21 +433,28 @@ i {
 }
 
 .modal-content {
+    position: relative;
     background-color: #fefefefb;
-    padding: 20px;
+    padding: 50px;
     border: 1px solid #888;
     border-radius: 25px;
-    height: 50%;
-    width: 60%;
+    height: 30%;
+    width: 50%;
     color: #06a0d4;
     text-align: center;
     font-size: 25px;
     margin: auto;
 }
 
+#msg {
+    line-height: 150%;
+}
+
 .close {
+    position: absolute;
     color: #06a0d4;
-    float: right;
+    top: 15px;
+    right: 15px;
     font-size: 28px;
     font-weight: bold;
 }

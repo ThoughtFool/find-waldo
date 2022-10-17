@@ -242,11 +242,14 @@ function getDegree(clientX, clientY, puppyElemCoordsX, puppyElemCoordsY) {
 
 // TODO: add game title and directions
 // TODO: add hover over helper for grabbing glasses
-// TODO: add an array of searchable images
-// TODO: add a "found waldo" button with waldoChecker function
 
 function getTimestamp () {
-    let timestamp = `${minutes}:${seconds}:${miliseconds}`;
+
+    let minutesStamp = minutes > 10 ? minutes : `0${minutes}`;
+    let secondsStamp =  seconds > 10 ? seconds : `0${seconds}`;
+    let milisecondsStamp = miliseconds > 10 ? miliseconds : `0${miliseconds}`;
+    
+    let timestamp = `${minutesStamp}:${secondsStamp}:${milisecondsStamp}`;
     
     return timestamp;
 };
@@ -255,12 +258,14 @@ let foundYouElem = document.getElementById("found-you");
 foundYouElem.addEventListener("click", function () {
     let theresWaldo = foundWaldo();
 
-    // TODO: replace alerts with non-blocking, toast messages:
+    // TODO: add toast messages:
     if (theresWaldo) {
-        let msg = `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.`;
+        let timestamp = getTimestamp();
+
+        let msg = `Great job! You've found Waldo. He's in the ${theresWaldo}-side lens.
+        This is how long it took you to find Waldo: ${timestamp}`;
         let lens = document.querySelector(`.lens-${theresWaldo}`);
 
-        let timestamp = getTimestamp();
 
         // TODO: getLocalObj and spread the results, pushing in new values:
         // TODO: overwrite the previous scores with faster times for each screen:
